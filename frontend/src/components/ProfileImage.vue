@@ -1,7 +1,5 @@
 <template>
-	<div class="newPost__photo">
-		<img :src="src || 'user-circle-solid.svg'" class="image" alt="Photo de profil"/>
-	</div>
+		<img src="../assets/avatar_null.png" class="photo" alt="Photo de profil"/>
 </template>
 
 
@@ -13,11 +11,10 @@
 </script>
 
 
-<style lang="scss">
-	.image {
+<style lang="scss" scoped>
+	.photo{
 		object-fit: cover;
-		width: 3rem;
-		height: 3rem;
-		border-radius: 100%;
+		border-radius: 10%;
+		border: 1px solid #E0E2DB;
 	}
 </style>
