@@ -11,7 +11,7 @@
                 </div>
             </div>
 
-            <button @click="logout" class="modaleBloc__card__button" aria-label="Se déconnecter">Oui, je me déconnecte <i class="fas fa-sign-out-alt"></i></button>
+            <button @click="logout" class="modaleBloc__card__button" aria-label="Se déconnecter">Se  déconnecter</button>
         </div>
     </div>
 </template>
@@ -26,7 +26,8 @@
                 // Permet de se déconnecter
                 localStorage.removeItem('token');
                 localStorage.removeItem('userId');
-                localStorage.removeItem('username');
+                localStorage.removeItem('firstname');
+                localStorage.removeItem('lastname');
                 localStorage.removeItem('isAdmin');
                 localStorage.removeItem('imageProfile');
                 
@@ -37,7 +38,7 @@
 </script>
 
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
     .modaleBloc {
         position: fixed;
         top: 0;
