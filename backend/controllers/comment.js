@@ -5,7 +5,7 @@ const db = require('../models/index');
 // Permet de créer un nouveau commentaire
 exports.createComment = (req, res, next) => {    
     const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET_TOKEN);
+    const decodedToken = jwt.verify(token, 'RANDOM_SECRET_TOKEN');
     const userId = decodedToken.userId;
     
     db.Post.findOne({

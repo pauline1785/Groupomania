@@ -8,7 +8,7 @@ exports.createPost = (req, res, next) => {
     const content = req.body.content;
 
     const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET_TOKEN);
+    const decodedToken = jwt.verify(token, 'RANDOM_SECRET_TOKEN');
     const userId = decodedToken.userId;
     
     // Permet de vérifier que tous les champs sont complétés
