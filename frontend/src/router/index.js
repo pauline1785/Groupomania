@@ -5,26 +5,26 @@ import VueRouteMiddleware from 'vue-route-middleware'
 
 const routes = [
   {
-    path: '/',
     name: 'Home',
+    path: '/',
     component: Home
   },
   {
-    path: '/signup',
     name: 'Signup',
+    path: '/signup',
     component: () => import(/* webpackChunkName: "about" */ '../views/Signup.vue')
   },
   {
-    path: '/post',
     name: 'Post',
+    path: '/post',
     component: () => import(/* webpackChunkName: "about" */ '../views/Post.vue'),
     meta: {
       middleware: auth
     }
   },
   {
-    path: '/profile',
     name: 'Profile',
+    path: '/profile',
     component: () => import(/* webpackChunkName: "about" */ '../views/Profile.vue'),
     meta: {
       middleware: auth
