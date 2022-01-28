@@ -1,32 +1,19 @@
-<template>  
-    <div id="app">
-        <nav class="navbar navbar-expand-lg navbar-light nav">
-            <img class="nav__logo" src="../assets/iconLong450.png" alt="Logo de Groupomania">
+<template> 
+    <header>
+        <div class="brand_logo">
+            <img src="../assets/groupomania_black_logo.svg" alt="logo Groupomania"/>
+        </div>
 
-            <button class="navbar-toggler justify-content-center nav__menuButton" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="fa fa-bars"></i>
-            </button>
-            
-            <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-                <ul class="navbar-nav nav__links">
-                    <li class="nav-item">
-                        <router-link to="/post" class="nav__links__link">Accueil</router-link> 
-                    </li>
-
-                    <li class="nav-item">
-                        <router-link to="/profile" class="nav__links__link">Mon profil</router-link>
-                    </li>
-
-                    <li class="nav-item">
-                        <ModaleLogout v-bind:revele="revele" v-bind:displayModale='displayModale'/>
-                        <button @click="displayModale" class="nav__links__logoutLink">Déconnexion <i class="fas fa-sign-out-alt"></i></button>    
-                    </li>
-                </ul>
-            </div>
+        <nav>
+            <ul>
+                <li><router-link to="/post" class="links">Accueil</router-link></li>
+                <li><router-link to="/profile" class="links">Profil</router-link></li>
+                <li><ModaleLogout v-bind:revele="revele" v-bind:displayModale='displayModale'/>
+                    <button @click="displayModale" class="links logout">Déconnexion</button>
+                </li>
+            </ul>
         </nav>
-
-        <router-view/>
-    </div>
+    </header>
 </template>
 
 <script>
@@ -51,56 +38,40 @@
     }
 </script>
 
-<style scoped lang="scss">
-    .nav {
+<style lang="scss" scoped>
+    header{
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0.8rem;
-        box-shadow: 0px 5px 15px #3f3d56;
-        &__logo {
+        padding: 1.2rem 4rem;
+        border-bottom: 1px solid #979797;
+    }
+    
+    .brand_logo img{
+        display: flex;
+        justify-content: flex-start;
+        max-width: 450px;
+        width: 50%;
+    }
+
+    nav {
+        & ul{
             display: flex;
-            justify-content: flex-start;
-            max-width: 450px;
-            width: 52%;
-        }
-        &__menuButton:hover, &__menuButton:focus {
-            color: #ff6363;
-        }
-        a, button {
-            font-weight: bold;
-            color: #3f3d56;
-            // &.router-link-exact-active {
-            // color: #ff6363;
-            // }
-            &:hover, &:focus  {
-                color: #ff6363;
-            }
-        }
-        &__links {
-            padding: 2rem;
+            flex-flow: row wrap;
             align-items: flex-end;
-            @media (max-width: 776px) {
-                padding: 0;
+        }
+        & .links{
+            text-decoration: none;
+            padding: 1rem 4rem 0 0;
+            align-items: flex-end;
+            color: #000;
+            &:hover{
+                color: #F74038;
             }
-            &__link {   
-                padding-right: 4rem;
-                text-decoration: none;
-                align-items: flex-end;
-                @media (max-width: 990px) {
-                    padding: 0;
-                }
-            }
-            &__logoutLink {
-                border: none;
-                background-color: white;
-                &:hover, &:focus  {
-                    color: #ff6363;
-                }
-                @media (max-width: 990px) {
-                    padding-right: 0;
-                }
-            }
+        }
+        & .logout{
+            border: none;
+            background-color: #fff;
         }
     }
 </style>
