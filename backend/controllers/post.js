@@ -34,12 +34,12 @@ exports.createPost = (req, res, next) => {
             })
             post.save()
             .then(() => res.status(201).json({ message: 'Votre message a bien été créé !' }))
-            .catch(error => res.status(400).json({ error: '⚠ Oops, une erreur s\'est produite !' }));
+            .catch(error => res.status(400).json({ error: 'Error : code 400' }));
         } else {
             return res.status(404).json({ error: 'Utilisateur non trouvé' })
         }
     })
-    .catch(error => res.status(500).json({ error: '⚠ Oops, une erreur s\'est produite !' }));
+    .catch(error => res.status(500).json({ error: 'Error : code 500' }));
 };
 
 
@@ -49,7 +49,7 @@ exports.getAllPosts = (req, res, next) => {
         order: [['createdAt', "DESC"]] ,
         include: [{
             model: db.User,
-            attributes: [ 'username', 'imageProfile' ]
+            attributes: [ 'firstname', 'imageProfile' ]
         },{
             model: db.Comment
         }]
@@ -62,7 +62,7 @@ exports.getAllPosts = (req, res, next) => {
         }
     })
     .catch(error => {
-        res.status(500).send({ error: '⚠ Oops, une erreur s\'est produite !' });
+        res.status(500).send({ error: 'Error : code 500' });
     });
 }
 
@@ -90,13 +90,13 @@ exports.modifyPost = (req, res, next) => {
                 where: { id: req.params.postId}
             })
             .then(post => res.status(200).json({ message: 'Votre message a bien été modifié !' }))
-            .catch(error => res.status(400).json({ error: '⚠ Oops, une erreur s\'est produite !' }))
+            .catch(error => res.status(400).json({ error: 'Error : code 400' }))
         }
         else {
             res.status(404).json({ error: 'Message non trouvé' });
         }
     })
-    .catch(error => res.status(500).json({ error: '⚠ Oops, une erreur s\'est produite !' }));
+    .catch(error => res.status(500).json({ error: 'Error : code 500' }));
 }
 
 
@@ -116,20 +116,20 @@ exports.deletePost = (req, res, next) => {
                         where: { id: req.params.postId } 
                     })
                     .then(() => res.status(200).json({ message: 'Votre message a été supprimé' }))
-                    .catch(() => res.status(500).json({ error: '⚠ Oops, une erreur s\'est produite !' }));
+                    .catch(() => res.status(500).json({ error: 'Error : code 500' }));
                 })
             } else {
                 db.Post.destroy({ 
                     where: { id: req.params.postId } 
                 })
                 .then(() => res.status(200).json({ message: 'Votre message a été supprimé' }))
-                .catch(() => res.status(500).json({ error: '⚠ Oops, une erreur s\'est produite !' }));
+                .catch(() => res.status(500).json({ error: 'Error : code 500' }));
             }
         } else {
             return res.status(404).json({ error: 'Message non trouvé'})
         }
     })
-    .catch(error => res.status(500).json({ error: '⚠ Oops, une erreur s\'est produite !' }));
+    .catch(error => res.status(500).json({ error: 'Error : code 500!' }));
 }
 
 

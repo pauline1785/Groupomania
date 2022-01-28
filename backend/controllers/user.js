@@ -46,10 +46,10 @@ exports.signup = (req, res, next) => {
 
     // Permet de vérifier que l'utilisateur que l'on souhaite créer n'existe pas déjà
     db.User.findOne({
-        attributes: ['username' || 'email'],
+        attributes: ['firstname' || 'lastname' || 'email'],
         where: { 
             firstname: firstname, 
-            lastame: lastname, 
+            lastname: lastname, 
             email: email
         }
     })
@@ -66,14 +66,19 @@ exports.signup = (req, res, next) => {
                 });
                 user.save()
                     .then(() => res.status(201).json({ message: 'Votre compte a bien été créé !' }))
-                    .catch(error => res.status(400).json({ error: '⚠ Oops, une erreur s\'est produite !' }));
+                    .catch(error => res.status(400).json({ error: 'Error : code 400' }));
             })
             .catch(error => res.status(500).json({ error: 'Une erreur s\'est produite lors de la création de votre compte' }));
         } else {
             return res.status(404).json({ error: 'Cet utilisateur existe déjà' })
         }
     })
-    .catch(error => res.status(500).json({ error: '⚠ Oops, une erreur s\'est produite !' }));
+    .catch(error =>{
+        res.status(500).json({ error: 'Error : code 500' })
+        console.log(error);
+    } 
+    
+    );
 };
 
 
@@ -102,12 +107,12 @@ exports.login = (req, res, next) => {
                     )
                 });
             })
-            .catch(error => res.status(500).json({ error: '⚠ Oops, une erreur s\'est produite !' }));
+            .catch(error => res.status(500).json({ error: 'Error: code 500' }));
         } else {
             return res.status(404).json({ error: 'Cet utilisateur n\'existe pas, veuillez créer un compte' })
         }
     })
-    .catch(error => res.status(500).json({ error: '⚠ Oops, une erreur s\'est produite !' }));
+    .catch(error => res.status(500).json({ error: 'Error : code 500' }));
 }
 
 
@@ -125,7 +130,7 @@ exports.getUserProfile = (req, res, next) => {
             res.status(404).json({ error: 'Utilisateur non trouvé' })
         }
     })
-    .catch(error => res.status(404).json({ error: '⚠ Oops, une erreur s\'est produite !' }));
+    .catch(error => res.status(404).json({ error: 'Error: code 404' }));
 }
 
 
@@ -154,13 +159,13 @@ exports.modifyUserProfile = (req, res, next) => {
                 where: { id: userId}
             })
             .then(user => res.status(200).json({ message: 'Votre profil a bien été modifié !' }))
-            .catch(error => res.status(400).json({ error: '⚠ Oops, une erreur s\'est produite !' }))
+            .catch(error => res.status(400).json({ error: 'Error : code 400' }))
         }
         else {
             res.status(404).json({ error: 'Utilisateur non trouvé' });
         }
     })
-    .catch(error => res.status(500).json({ error: '⚠ Oops, une erreur s\'est produite !' }));
+    .catch(error => res.status(500).json({ error: 'Error : code 500' }));
 }
 
 
@@ -177,12 +182,12 @@ exports.deleteAccount = (req, res, next) => {
                 where: { id: id } 
             })
             .then(() => res.status(200).json({ message: 'Votre compte a été supprimé' }))
-            .catch(() => res.status(500).json({ error: '⚠ Oops, une erreur s\'est produite !' }));
+            .catch(() => res.status(500).json({ error: 'Error : code 500' }));
             
         } else {
             return res.status(404).json({ error: 'Utilisateur non trouvé' })
         }
     })
-    .catch(error => res.status(500).json({ error: '⚠ Oops, une erreur s\'est produite !' }));
+    .catch(error => res.status(500).json({ error: 'Error : code 500' }));
 }
 

@@ -20,12 +20,12 @@ exports.createComment = (req, res, next) => {
             })
             comment.save()
                 .then(() => res.status(201).json({ message: 'Votre commentaire a bien été créé !' }))
-                .catch(error => res.status(400).json({ error: '⚠ Oops, une erreur s\'est produite !' }));
+                .catch(error => res.status(400).json({ error: 'Error : code 400' }));
         } else {
             return res.status(404).json({ error: 'Message non trouvé'})
         }
     })
-    .catch(error => res.status(500).json({ error: '⚠ Oops, une erreur s\'est produite !' }));
+    .catch(error => res.status(500).json({ error: 'Error : code 500' }));
 }
 
 
@@ -36,7 +36,7 @@ exports.getAllComments = (req, res, next) => {
         where: { postId: req.params.postId },
         include: [{
             model: db.User,
-            attributes: [ 'username', 'imageProfile' ]
+            attributes: [ 'firstname', 'imageProfile' ]
         }]
     })
     .then(commentFound => {
@@ -48,7 +48,7 @@ exports.getAllComments = (req, res, next) => {
         }
     })
     .catch(error => {
-        res.status(500).send({ error: '⚠ Oops, une erreur s\'est produite !' });
+        res.status(500).send({ error: 'Error : code 500' });
     });
 }
 
@@ -65,11 +65,11 @@ exports.deleteComment = (req, res, next) => {
                 where: { id: req.params.commentId } 
             })
             .then(() => res.status(200).json({ message: 'Votre commentaire a été supprimé' }))
-            .catch(() => res.status(500).json({ error: '⚠ Oops, une erreur s\'est produite !' }));
+            .catch(() => res.status(500).json({ error: 'Error : code 500' }));
             
         } else {
             return res.status(404).json({ error: 'Commentaire non trouvé'})
         }
     })
-    .catch(error => res.status(500).json({ error: '⚠ Oops, une erreur s\'est produite !' }));
+    .catch(error => res.status(500).json({ error: 'Error : code 500' }));
 }
