@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
+const db = require('./models/index');
 
 // accéder au chemin du système de fichiers
 const path = require('path');
