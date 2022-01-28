@@ -1,35 +1,29 @@
 <template>  
+    <Navbar/>
+
+    <section class="NewPost">
+        <ProfileImage v-if="imageProfile == 'null'" :src="'../assets/avatar_null.png'" class="NewPost__avatar"/>
+        <ProfileImage v-else :src="imageProfile" class="NewPost__avatar"/>
+
+        <form @submit.prevent="createPost" aria-label="Nouveau message" class="NewPost__content">
+            <textarea v-model="content" class="NewPost__content__text" name="message" id="message" placeholder="Quoi de neuf ?" aria-label="Rédiger un nouveau message"/>    
+            
+            <button type="submit" class="NewPost__publish" aria-label="Publier le message">Publier</button> 
+
+            <div id="preview" style="display:block">
+                <img v-if="imagePreview" :src="imagePreview" id="preview" style="display:block" class="NewPost__content__preview" alt="Prévisualisation de l'image ajoutée au message"/>
+            </div> 
+
+            <button @click="uploadFile" type="button" class="NewPost__upload"><i class="far fa-image"></i></button>
+            <input type="file" style="display:none" ref="fileUpload" @change="onFileSelected" accept="image/*" aria-label="Sélectionner un fichier">
+        </form>
+    </section>
+
+    <section class="Feed">
+    </section>
+
+
     <div id="post">
-        <Navbar/>
-
-        <h1 class="invisible">Fil d'actualité</h1>
-
-        <div class="newPost">
-            <div class="newPost__photo">
-                <ProfileImage v-if="imageProfile == 'null'" :src="'user-circle-solid.svg'" class="newPost__photo"/>
-                <ProfileImage v-else :src="imageProfile" class="newPost__photo"/>
-            </div>
-
-            <form @submit.prevent="createPost" aria-label="Nouveau message">
-                <div class="newPost__content">
-                    <textarea v-model="content" class="newPost__content__text" name="message" id="message" placeholder="Quoi de neuf ?" aria-label="Rédiger un nouveau message"/>    
-                    
-                    <div id="preview" style="display:block">
-                        <img v-if="imagePreview" :src="imagePreview" id="preview" style="display:block" class="newPost__content__image" alt="Prévisualisation de l'image ajoutée au message"/>
-                    </div>        
-                </div>
-
-                <div class="newPost__option">
-                    <div class="newPost__option__file">
-                    <button @click="uploadFile" type="button" class="newPost__option__file__btnInvisible"><i class="far fa-images fa-2x"></i> Choisir un fichier</button>
-                    
-                        <input type="file" ref="fileUpload" @change="onFileSelected" accept="image/*" aria-label="Sélectionner un fichier">
-                    </div>
-                    
-                    <button type="submit" class="newPost__option__button" aria-label="Publier le message">Publier <i class="far fa-paper-plane"></i></button>
-                </div>
-            </form>
-        </div>
         
         <div class="displayPost" v-for="post in posts" :key="post.postId">
             <div class="displayPost__item">
@@ -131,7 +125,7 @@
     import { Notyf } from 'notyf'
     import 'notyf/notyf.min.css'
     
-    import Navbar from '@/components/Navbar.vue'
+    import Navbar from '../components/Navbar.vue'
     import ProfileImage from '../components/ProfileImage.vue'
     import Likes from '../components/Likes.vue'
 
@@ -393,82 +387,82 @@
 </script>
 
 
-<style scoped lang="scss">
-    .invisible {
+<style lang="scss" scoped>
+    .NewPost{
+        padding: 1rem;
+        width: 40%;
+        height: auto;
+        background-color: #FFF;
+        margin: 2rem auto;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        border-radius: 10px;
+        border: 1px solid #E0E2DB;
+        &__avatar{
+            width: 4rem;
+            height: 4rem;
+        }
+        &__content{
+            width: 85%;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            &__text{
+                width: 80%;
+                margin-right: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+            &__preview{
+                max-width: 50rem;
+                width: 90%;
+                height: 274px;
+                margin: 1rem auto;
+                object-fit: cover;
+            }
+           
+        }
+         &__publish{
+            background-image: linear-gradient(to right, #eb3941, #f15e64, #e14e53, #e2373f);  
+            width: 15%;
+            color: #fff;
+            cursor: pointer;
+            height: 40px;
+            text-align:center;
+            border: none;
+            align-self: center;
+            background-size: 300% 100%;
+            border-radius: 5%;
+            moz-transition: all .4s ease-in-out;
+            -o-transition: all .4s ease-in-out;
+            -webkit-transition: all .4s ease-in-out;
+            transition: all .4s ease-in-out;
+            &:hover{
+                background-position: 100% 0;
+                moz-transition: all .4s ease-in-out;
+                -o-transition: all .4s ease-in-out;
+                -webkit-transition: all .4s ease-in-out;
+                transition: all .4s ease-in-out;
+            }
+            &:focus{
+               outline: none; 
+            }
+        }
+        &__upload{
+            border: none;
+            background-color: #fff;
+            font-size: 1.2rem;
+        }
+    }
+
+
+
+
+    /*.invisible {
         display: none;
     }
-    .newPost {
-        background: #ffb1b1;
-        border-radius: 25px;
-        margin: auto;
-        margin-top: 2rem;
-        padding: 1rem;
-        width: 50%;
-        @media (max-width: 950px) {
-            width: 60%;
-        }
-        @media (max-width: 768px) {
-            width: 70%;
-        }
-        @media (max-width: 550px) {
-            width: 80%;
-        }
-        @media (max-width: 450px) {
-            width: 90%;
-        }
-        &__photo__image {
-            width: 47px;
-        }
-        &__content__text {
-            border-radius: 0 15px;
-            border: none;
-            margin: 1.5rem 0 0 0;
-            max-width: 50rem;
-            width: 90%;
-            min-height: 5rem;
-        }
-        &__content__image {
-            max-width: 50rem;
-            width: 90%;
-            height: 274px;
-            margin: 1rem auto;
-            object-fit: cover;
-        }
-        &__option {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            &__file>input {
-                display: none; 
-            }
-            &__file {
-                &__btnInvisible {
-                    display: flex;
-                    align-items: center;
-                    color: #3f3d56;
-                    border: none;
-                    background-color: #ffb1b1;
-                    &:hover, &:focus {
-                        color: white;
-                    }
-                }
-            }
-            &__button {
-                border: 2px solid #3f3d56;
-                border-radius: 25px;
-                color: #3f3d56;
-                font-size: 15px;
-                font-weight: bold;
-                padding: 0.4rem;
-                margin: 1rem;
-                outline-style: none;
-                &:hover, &:focus {
-                    color: #ff6363;
-                }
-            }
-            
-        }
-    }
+    
     .displayPost {
         display: flex;
         flex-direction: column;
@@ -713,5 +707,5 @@
         button {
             font-size: 14px;
         }
-    }
+    }*/
 </style>
