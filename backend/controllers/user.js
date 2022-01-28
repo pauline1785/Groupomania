@@ -102,7 +102,7 @@ exports.login = (req, res, next) => {
                     imageProfile: user.imageProfile,
                     token: jwt.sign(
                         {userId: user.id},
-                        process.env.JWT_SECRET_TOKEN,
+                        'RANDOM_TOKEN_SECRET',
                         {expiresIn: '24h'}
                     )
                 });
