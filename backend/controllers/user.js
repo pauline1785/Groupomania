@@ -25,13 +25,13 @@ exports.signup = (req, res, next) => {
     } 
 
     // Permet de contrôler la longueur du prénom
-    if(firstname.length <= 3 || firstname.length >= 15) {
-        return res.status(400).json({ error: 'Le pseudo doit contenir 3 à 15 caractères' });
+    if(firstname.length <= 2 || firstname.length >= 30) {
+        return res.status(400).json({ error: 'Le prénom doit contenir 2 à 30 caractères' });
     }
 
     // Permet de contrôler la longueur du nom
-    if(lastname.length <= 3 || lastname.length >= 15) {
-        return res.status(400).json({ error: 'Le pseudo doit contenir 3 à 15 caractères' });
+    if(lastname.length <= 2 || lastname.length >= 30) {
+        return res.status(400).json({ error: 'Le nom doit contenir 2 à 30 caractères' });
     }
 
     // Permet de contrôler la validité de l'adresse mail
