@@ -1,6 +1,6 @@
-<template>  
+<template> 
     <Navbar/>
-
+    <!-- CREATION D'UN POST -->
     <section class="NewPost">
         <ProfileImage v-if="imageProfile == 'null'" :src="'../assets/avatar_null.png'" class="NewPost__avatar"/>
         <ProfileImage v-else :src="imageProfile" class="NewPost__avatar"/>
@@ -19,102 +19,87 @@
         </form>
     </section>
 
+    <!-- AFFICHAGE DES POSTS -->
     <section class="Feed">
-    </section>
+        <!-- un post -->
+        <div class="Post" v-for="post in posts" :key="post.postId">
 
-
-    <div id="post">
-        
-        <div class="displayPost" v-for="post in posts" :key="post.postId">
-            <div class="displayPost__item">
-                <div class="displayPost__item__information">
-                    <div class="displayPost__item__information__user">
-                        <ProfileImage :src="post.User.imageProfile" class="displayPost__item__information__user__photo"/>
-                        <h2 class="displayPost__item__information__user__name">{{ post.User.username }}</h2>
-                    </div>
-                  
-                    <div>
-                        <span class="displayPost__item__information__date">Publié le {{ dateFormat(post.createdAt) }}</span>
-                    </div>
+            <div class="Post__user">
+                <ProfileImage :src="post.User.imageProfile" class="Post__user__avatar"/>
+                <div class="Post__user__infos">
+                    <h2 class="Post__user__infos__name">{{ post.User.firstname }}</h2>
+                    <span class="Post__user__infos__date">{{ dateFormat(post.createdAt) }}</span>
                 </div>
-
-                <div class="displayPost__item__publication">
-                    <p :contentPostId="post.id" style="display:block" class="displayPost__item__publication__text">{{ post.content }}</p>
-
-                    <div :inputId="post.id" style="display:none" v-bind:showInputModify="showInputModify" class="displayPost__item__publication__text__modifyText">
-                        <textarea v-model="contentmodifyPost" :placeholder="post.content" id="textarea" class="displayPost__item__publication__text__modifyText__textarea" aria-label="Modifier le message"/>
-                        
-                        <div class="displayPost__item__publication__text__modifyText__option">
-                            <div class="displayPost__item__publication__text__modifyText__option__file">
-                                <button @click="uploadFile" type="button" class="displayPost__item__publication__text__modifyText__option__file__btnInvisible"><i class="far fa-images fa-2x"></i> Choisir un fichier</button>
-                               
-                                <input type="file" ref="fileUpload" @change="onFileSelected" accept="image/*" aria-label="Sélectionner un fichier">
-                            </div>
-
-                            <button v-on:click="modifyPost(post.id)" class="displayPost__item__publication__text__modifyText__option__button" aria-label="Enregistrer les modifications">Enregistrer <i class="fas fa-check"></i></button>
-                        </div>
-
-                        <img v-if="post.imagePost && !imagePreview" :src="post.imagePost" class="displayPost__item__publication__image" alt="Image insérée dans le message"/>
-                        
-                        <img v-if="imagePreview" :src="imagePreview" class="newPost__content__image" alt="Prévisualisation de l'image ajoutée au message modifié"/>
-                    </div>
-
-                    <img v-if="post.imagePost" :imgPostId="post.id" style="display:block" :src="post.imagePost" class="displayPost__item__publication__image" alt="Image insérée dans le message"/>
-                </div>
-
-                <div class="displayPost__item__option">
-                    <Likes v-bind:post="post"/>
-                    
-                    <div>
-                        <i @click="displayComment(post.id)" v-on:click="diplayCreateComment(post.id)" class="displayPost__item__option__button far fa-comment-dots" aria-label="Commenter le message"></i>
-                        <span v-if="post.Comments.length > 0" class="displayPost__item__option__count">{{ post.Comments.length }}</span>
-                    </div>
-                    
-                    <i v-if="userId == post.UserId || isAdmin == 'true'" @click="displayModifyPost(post.id)" class="displayPost__item__option__button far fa-edit" aria-label="Modifier le message"></i>
-                    
-                    <i v-if="userId == post.UserId || isAdmin == 'true'" v-on:click="deletePost(post.id)" class="displayPost__item__option__button far fa-trash-alt" aria-label="Supprimer le message"></i>
+                <div  class="Post__user__modify">
+                    <i v-if="userId == post.UserId || isAdmin == 'true'" @click="displayModifyPost(post.id)" class="far fa-edit" aria-label="Modifier l'article"></i>
+                    <i v-if="userId == post.UserId || isAdmin == 'true'" v-on:click="deletePost(post.id)" class="far fa-trash-alt" aria-label="Supprimer l'article"></i>
                 </div>
             </div>
-            
-            <div>
-                <div class="displayComment" v-for="comment in comments" :key="comment.commentId">
-                    <div v-bind:showComment="showComment" v-if="showComment && post.id == comment.postId" class="displayComment__item">
-                        <div class="displayComment__item__information">
-                            <div class="displayComment__item__information__user">
-                                <ProfileImage :src="comment.User.imageProfile" class="displayPost__item__information__user__photo"/>
-                                
-                                <h2 class="displayComment__item__information__user__name"> {{ comment.User.username }}</h2>
-                            </div>
 
-                            <div>
-                                <span class="displayPost__item__information__date">Publié le {{ dateFormat(comment.createdAt) }}</span>
-                            </div>
+            <div class="Post__text">
+                <p :contentPostId="post.id" style="display:block" >{{ post.content }}</p>
+            </div>
+
+            <img v-if="post.imagePost" :imgPostId="post.id" style="display:block" :src="post.imagePost" class="Post__image" alt="Image de l'article publié"/>            
+
+            <div class="Post__options">
+                <Likes v-bind:post="post"/>
+                <div class="Post__options__comments">
+                    <i @click="displayComment(post.id)" v-on:click="diplayCreateComment(post.id)" class="far fa-comment" aria-label="Commenter l'article"></i>
+                    <span v-if="post.Comments.length > 0">{{ post.Comments.length }}</span>
+                </div>
+            </div>
+        
+            <!-- modification du post -->
+            <div :inputId="post.id" style="display:none" v-bind:showInputModify="showInputModify" class="Post__edit">
+                <textarea v-model="contentmodifyPost" :placeholder="post.content" id="textarea" class="Post__edit__text" aria-label="Modifier le message"/>
+                
+                <div class="Post__edit__options">
+                    <button @click="uploadFile" type="button"><i class="far fa-images fa-2x"></i></button>   
+                    <input type="file" ref="fileUpload" style="display:none" @change="onFileSelected" accept="image/*" aria-label="Sélectionner un fichier">
+        
+                    <button v-on:click="modifyPost(post.id)" class="Post__edit__save" aria-label="Enregistrer les modifications"><i class="far fa-check-circle"></i></button>
+                </div>
+
+                <img v-if="post.imagePost && !imagePreview" :src="post.imagePost" class="Post__edit__preview" alt="Image insérée dans l'article"/>
+                <img v-if="imagePreview" :src="imagePreview" class="Post__edit__preview" alt="Prévisualisation de l'image ajoutée"/>
+            </div>
+
+            <!-- commentaires -->
+            <div class="Post__comments">
+                <div class="Comment" v-for="comment in comments" :key="comment.commentId">
+                    <div v-bind:showComment="showComment" v-if="showComment && post.id == comment.postId">
+                        <div class="Comment__infos">
+                            <ProfileImage :src="comment.User.imageProfile" class="Comment__infos__avatar"/>
+                            <h3 class="Comment__infos__name"> {{ comment.User.firstname }}</h3>
+                            <span class="Comment__infos__date">{{ dateFormat(comment.createdAt) }}</span>  
                         </div>
 
-                        <div class="displayPost__item__publication">
-                            <p class="displayPost__item__publication__text">{{ comment.content }}</p>
+                        <div class="Comment__content">
+                            <p>{{ comment.content }}</p>
                         </div>
 
-                        <div class="displayPost__item__option">
-                            <i v-if="userId == comment.UserId || isAdmin == 'true'" @click="deleteComment(comment.id)" class="displayPost__item__option__button far fa-trash-alt"></i>
+                        <div class="Comment__option">
+                            <i v-if="userId == comment.UserId || isAdmin == 'true'" @click="deleteComment(comment.id)" class="Comment__option__delete far fa-trash-alt"></i>
                         </div>
                     </div>
                 </div>
-
-                <div :formId="post.id" style="display:none" v-bind:showCreateComment="showCreateComment" class="displayComment__newComment">
-                    <form @submit.prevent="createComment(post.id)" class="displayComment__newComment__form">
-                        <textarea v-model="contentComment" class="displayComment__newComment__form__text" name="comment" id="comment" placeholder="Ecrivez votre commentaire ..." aria-label="Rédiger un nouveau commentaire"/>              
+                <!-- nouveau commentaire -->
+                <div :formId="post.id" style="display:none" v-bind:showCreateComment="showCreateComment" class="NewComment">
+                    <form @submit.prevent="createComment(post.id)" class="NewComment__form">
+                        <textarea v-model="contentComment" class="NewComment__text" name="comment" id="comment" placeholder="Ecrivez votre commentaire ..." aria-label="Rédiger un nouveau commentaire"/>              
                         
                         <div>
-                            <button class="displayComment__newComment__form__button" aria-label="Publier le commentaire"><i class="far fa-paper-plane"></i></button>
+                            <button class="NewComment__publish" aria-label="Publier le commentaire">Commenter</button>
                         </div>
                     </form>
                 </div>
             </div>
+            
         </div>
+    </section>
 
-        <router-view/>
-    </div>
+    <router-view/>
 </template>
 
 
@@ -139,7 +124,7 @@
         data() {
             return {
                 userId: localStorage.getItem('userId'),
-                username: localStorage.getItem('username'),
+                firstname: localStorage.getItem('firstname'),
                 isAdmin: localStorage.getItem('isAdmin'),
                 imageProfile: localStorage.getItem('imageProfile'),
                 posts: [],
@@ -413,6 +398,7 @@
                 width: 80%;
                 margin-right: 0.5rem;
                 margin-bottom: 0.5rem;
+                border: none;
             }
             &__preview{
                 max-width: 50rem;
@@ -453,259 +439,158 @@
             border: none;
             background-color: #fff;
             font-size: 1.2rem;
+            &:hover{
+                color: #F74038;
+            }
         }
     }
 
 
-
-
-    /*.invisible {
-        display: none;
+    .Feed{
+       margin: 2rem auto;
     }
-    
-    .displayPost {
+
+    .Post{
+        padding: 1rem;
+        width: 40%;
+        height: auto;
+        background-color: #FFF;
+        margin: 0 auto;
+        border-radius: 10px;
+        border: 1px solid #E0E2DB;
         display: flex;
         flex-direction: column;
-        &__item {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        text-align: left;
+        position: relative;
+        &__user{
             display: flex;
-            flex-direction: column;
-            border: 2px solid #ff6363;
-            border-radius: 25px;
-            margin: auto;
-            margin-top: 2rem;
-            padding: 1rem;
-            width: 50%;
-            @media (max-width: 950px) {
-                width: 60%;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+            &__avatar{
+                width: 4rem;
+                height: 4rem;
+                margin-right: 15px;
             }
-            @media (max-width: 768px) {
-                width: 70%;
-                padding: 0.5rem;
-            }
-            @media (max-width: 550px) {
-                width: 80%;
-            }
-            @media (max-width: 450px) {
-                width: 90%;
-            }
-            &__information {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                @media (max-width: 380px) {
-                    display: flex;
-                    flex-wrap: wrap;
-                }
-                &__user {
-                    display: flex;
-                    align-items: center;
-                    &__photo {
-                    margin: 0.5rem 0.5rem 0 0;
-                    }
-                    &__name {
-                        margin-bottom: 0.2rem;
-                        font-size: 22px;
-                        @media (max-width: 767px) {
-                            font-size: 18px;
-                        }
-                    }
-                }
-                &__date {
-                    display: flex;
-                    justify-content: flex-end;
-                    @media (max-width: 767px) {
-                        font-size: 14px;
-                    }
-                    @media (max-width: 380px) {
-                        font-size: 10px;
-                    }
-                }
-            }
-            &__publication {
+            &__infos{
                 display: flex;
                 flex-direction: column;
-                margin: 0.5rem 2rem;
-                @media (max-width: 700px) {
-                    margin: 0.5rem;
+                position: absolute;
+                left: 6rem;
+                &__name{
+                    font-size: 1rem;
                 }
-                &__text {
-                    text-align: left;
-                    margin: 0 ;
-                    @media (max-width: 700px) {
-                        font-size: 14px;
-                    }
-                    @media (min-width: 2800px) {
-                        margin-left: 1.8rem;
-                    }
-                    &__modifyText {
-                        display: flex;
-                        align-items: center;
-                        padding: 2rem 0;
-                        margin: 1rem 0;
-                        border-radius: 15px;
-                        box-shadow: 5px 5px 15px grey;                    
-                        &__textarea {
-                            border-radius: 5px;
-                            width: 90%;
-                        }
-                        &__option {
-                            display: flex;
-                            align-items: center;
-                            justify-content: space-around;
-                            &__file>input {
-                            display: none; 
-                            }
-                            &__file__btnInvisible {
-                                display: flex;
-                                align-items: center;
-                                font-size: 14px;
-                                color: #3f3d56;
-                                border: none;
-                                background-color: white;
-                                &:hover, &:focus {
-                                    color: #ff6363;
-                                }
-                            }
-                            &__button {
-                                border: 2px solid #3f3d56;
-                                border-radius: 25px;
-                                color: #3f3d56;
-                                font-size: 14px;
-                                font-weight: bold;
-                                padding: 0.4rem;
-                                margin: 1rem;
-                                outline-style: none;
-                                margin-left: 1rem;
-                                &:hover, &:focus {
-                                    color: #ff6363;
-                                }
-                            }
-                        }
-                    }
-                }
-                &__image {
-                    max-width: 1250px;
-                    width: 100%;
-                    height: 274px;
-                    margin: 1rem auto;
-                    object-fit: cover;
+                &__date{
+                    font-size: 0.7rem;
+                    color: #ccc;
                 }
             }
-            &__option {
+            &__modify{
                 display: flex;
-                justify-content: space-around;
-                &__button:hover, &__button:focus {
-                    color: #ff6363;
+                flex-direction: column;
+                & .fa-edit{
+                    margin-bottom: 20px;
+                }
+                & .far:hover{
+                    color: #F74038;
                     cursor: pointer;
                 }
-                &__count {
-                    padding-left: 0.5rem;
+            }
+        }  
+        &__text{
+            margin-top: 10px;
+            width: 100%;
+        }
+        &__image{
+            max-width: 100%;
+            width: 100%;
+            height: auto;
+            margin: 10px 0;
+        }
+        &__options{
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+        }
+        &__edit{
+            width: 100%;
+            &__text{
+              width: 100%; 
+            }
+            &__options button{
+                border: none;
+                background-color: #fff;
+            }
+            &__options .far{
+                font-size: 2rem;
+                &:hover{
+                    color: #F74038;
                 }
+            }
+            &__preview{
+                width: 100%;
             }
         }
     }
 
-    .displayComment {
-        display: flex;
-        flex-direction: column;
-        &__item {
+    .Comment{
+        background-color: #E0E2DB;
+        border-radius: 2%;
+        padding: 10px;
+        margin: 1rem 0;
+        &__infos{
             display: flex;
-            flex-direction: column;
-            border: 2px solid #ff6363;
-            border-radius: 25px;
-            margin: auto;
-            margin-top: 0.5rem;
-            padding: 0.5rem;
-            width: 40%;
-            @media (max-width: 950px) {
-                width: 50%;
+            flex-direction: row;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            &__avatar{
+                width: 2rem;
+                height: 2rem;
             }
-            @media (max-width: 768px) {
-                width: 60%;
+            &__name{
+                font-size: 14px;
+                position: absolute;
+                left: 4rem;
             }
-            @media (max-width: 550px) {
-                width: 70%;
-            }
-            @media (max-width: 450px) {
-                width: 80%;
-            }
-            &__information {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                &__user {
-                    display: flex;
-                    align-items: center;
-                    &__photo {
-                    margin: 0 0.5rem 0 0;
-                    }
-                    &__name {
-                        margin-top: 0.5rem;
-                        margin-bottom: 0;
-                        font-size: 18px;
-                    }
-                }
-            }
-        }
-        &__newComment {
-            background: #ffb1b1;
-            border-radius: 25px;
-            margin: auto;
-            margin-top: 0.5rem;
-            padding: 0.5rem;
-            width: 40%;
-            @media (max-width: 950px) {
-                width: 50%;
-            }
-            @media (max-width: 768px) {
-                width: 60%;
-            }
-            @media (max-width: 550px) {
-                width: 70%;
-            }
-            @media (max-width: 450px) {
-                width: 80%;
-            }
-            &__form {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                &__text {
-                    border-radius: 15px;
-                    border: none;
-                    margin: 0.5rem ;
-                    padding: 0.5rem;
-                    max-width: 50rem;
-                    width: 90%;
-                    min-height: 3rem;
-                }
-                &__button {
-                    border: 2px solid #3f3d56;
-                    border-radius: 25px;
-                    color: #3f3d56;
-                    font-size: 15px;
-                    font-weight: bold;
-                    padding: 0.4rem;
-                    margin: 1rem;
-                    outline-style: none;
-                    &:hover, &:focus {
-                        color: #ff6363;
-                        cursor: pointer;
-                    }
-                    @media (max-width: 450px) {
-                        margin: 0.5rem;
-                    }
-                    
-                }
+            &__date{
+                font-size: 12px;
             }
         }
     }
-    @media (max-width: 767px) {
-        textarea {
-            font-size: 14px;
+
+    .NewComment{
+        &__text{
+            width: 100%;
         }
-        button {
-            font-size: 14px;
-        }
-    }*/
+        &__publish{
+            background-image: linear-gradient(to right, #eb3941, #f15e64, #e14e53, #e2373f);  
+            width: 15%;
+            color: #fff;
+            cursor: pointer;
+            height: 40px;
+            text-align:center;
+            border: none;
+            align-self: center;
+            background-size: 300% 100%;
+            border-radius: 5%;
+            moz-transition: all .4s ease-in-out;
+            -o-transition: all .4s ease-in-out;
+            -webkit-transition: all .4s ease-in-out;
+            transition: all .4s ease-in-out;
+            &:hover{
+                background-position: 100% 0;
+                moz-transition: all .4s ease-in-out;
+                -o-transition: all .4s ease-in-out;
+                -webkit-transition: all .4s ease-in-out;
+                transition: all .4s ease-in-out;
+            }
+            &:focus{
+               outline: none; 
+            }
+        } 
+    }
+
+
 </style>
