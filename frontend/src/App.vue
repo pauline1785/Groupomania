@@ -11,6 +11,9 @@
     text-decoration: none;
     list-style-type: none;
   }
+  p{
+    margin: 0;
+  }
 
   #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
