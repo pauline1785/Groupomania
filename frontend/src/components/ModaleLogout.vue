@@ -4,7 +4,7 @@
         
         <div class="modaleBloc__card">
             <div class="modaleBloc__card__title">
-                <h2>Souhaitez-vous vraiment vous déconnecter ?</h2>
+                <p>Souhaitez-vous vraiment vous déconnecter ?</p>
                 
                 <div class="modaleBloc__card__title__close">
                     <i @click="displayModale" class="far fa-times-circle fa-2x modaleBloc__card__title__close" aria-label="Fermer la fenêtre"></i>
@@ -48,6 +48,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        z-index: 599;
         &__overlay {
             background: rgba(0,0,0,0.5);
             position: fixed;
@@ -61,12 +62,13 @@
             position: fixed;
             background: #f1f1f1;
             color: #3f3d56;
+            padding: 20px;
             &__title {
                 display: flex;
                 flex-direction: column;
                 text-align: center;
                 padding: 3rem 6rem 1.5rem 6rem;
-                & h2 {
+                & p {
                     margin-top: 0px;
                     @media (max-width: 500px) {
                         font-size: 20px;
@@ -83,17 +85,29 @@
                 }
             }
             &__button {
-                border: 3px solid #3f3d56;
-                border-radius: 25px;
-                color: #3f3d56;
-                font-size: 15px;
-                font-weight: bold;
-                padding: 0.9rem;
-                margin: 1rem 0 2rem 0;
-                outline-style: none;
-                &:hover, &:focus {
-                    border: 3px solid #ff6363;
-                    color: #ff6363;
+                background-image: linear-gradient(to right, #eb3941, #f15e64, #e14e53, #e2373f);  
+                width: 40%;
+                color: #fff;
+                cursor: pointer;
+                height: 40px;
+                text-align:center;
+                border: none;
+                align-self: center;
+                background-size: 300% 100%;
+                border-radius: 5%;
+                moz-transition: all .4s ease-in-out;
+                -o-transition: all .4s ease-in-out;
+                -webkit-transition: all .4s ease-in-out;
+                transition: all .4s ease-in-out;
+                &:hover{
+                    background-position: 100% 0;
+                    moz-transition: all .4s ease-in-out;
+                    -o-transition: all .4s ease-in-out;
+                    -webkit-transition: all .4s ease-in-out;
+                    transition: all .4s ease-in-out;
+                }
+                &:focus{
+                outline: none; 
                 }
             }
         }       

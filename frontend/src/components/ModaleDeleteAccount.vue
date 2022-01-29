@@ -61,7 +61,7 @@
 </script>
 
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
     .modaleBloc {
         position: fixed;
         top: 0;
