@@ -455,7 +455,7 @@
         width: 40%;
         height: auto;
         background-color: #FFF;
-        margin: 0 auto;
+        margin: 2rem auto;
         border-radius: 10px;
         border: 1px solid #E0E2DB;
         display: flex;
