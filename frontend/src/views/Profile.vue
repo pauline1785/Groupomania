@@ -1,37 +1,35 @@
 <template>
-	<div>
-		<Navbar/>
-		<div>
-			<h1 v-if="user">Bienvenue {{ user.firstname }} !</h1>
+	<Navbar/>
+	<!-- PROFIL DE L'UTILISATEUR -->
+	<section class="Profile">
+		<h1 v-if="user">Hello {{ user.firstname }} !</h1>
 
-			<div class="profile">
-				<h2>Vos informations</h2>
+		<div class="Profile__avatar">
+			<ProfileImage :src="user.imageProfile"/>
 
-				<div class="profile__photo">
-					<ProfileImage :src="user.imageProfile" class="profile__photo__image"/>
-
-					<div class="profile__photo__modify">
-						<button @click="uploadFile" type="button" class="profile__photo__modify__btnInvisible">Modifier ma photo de profil</button>
-						
-						<input type="file" ref="fileUpload" @change="onFileSelected"  accept="image/*" id="file-input" aria-label="Modifier ma photo de profil">
-					</div>
-				</div>
-								
-				<div class="profile__info">
-					<p class="profile__info__title">Pseudo</p>
-					<div class="profile__info__text">{{ user.username }}</div>
-					
-					<p class="profile__info__title">Email</p>
-					<div class="profile__info__text">{{ user.email }}</div>
-				</div>
-
-				<button @click="modifyProfile" class="profile__smallButton">Enregister</button>
+			<div class="Profile__avatar__modify">
+				<button @click="uploadFile" type="button">Modifier ma photo</button>	
+				<input type="file" ref="fileUpload" @change="onFileSelected" style="display:none" accept="image/*" id="file-input" aria-label="Modifier ma photo">
 			</div>
-
-			<ModaleDeleteAccount v-bind:revele="revele" v-bind:displayModale='displayModale'/>
-			<button class="profile__bigButton" v-on:click="displayModale">Supprimer mon compte <i class="far fa-trash-alt"></i></button>
 		</div>
-	</div>
+
+		<div class="Profile__infos">
+			<h2>Prénom</h2>
+			<p>{{ user.firstname }}</p>
+
+			<h2>Nom</h2>
+			<p>{{ user.lastname }}</p>
+					
+			<h2>Email</h2>
+			<p>{{ user.email }}</p>
+		</div>
+
+		<button @click="modifyProfile" class="Profile__save">Enregister</button>
+
+		<ModaleDeleteAccount v-bind:revele="revele" v-bind:displayModale='displayModale'/>
+		<button class="Profile__delete" v-on:click="displayModale">Supprimer mon compte</button>
+	</section>
+
 </template>
 
 <script>
@@ -124,89 +122,69 @@
 	}
 </script>
 
-<style scoped lang="scss">
-	h1, h2 {
-	margin-top: 2rem;
-	}
-	.profile {
+<style lang="scss" scoped>
+	.Profile{
+		width: 60%;
+		margin: 2rem auto;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		min-width: 40%;
-		max-width: 60%;
-		margin: 3rem auto;
-		background: #ffb1b1;
-		border-radius: 25px;
-		@media (max-width: 500px) {
-			min-width: 80%;
-		}
-		&__photo {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			margin-top: 1rem;
-			&__image {
-			margin-right: 1rem;
-			margin-bottom: 0.5rem;
-			}
-			&__modify>input {
-			display: none; 
-			}
-			&__modify__btnInvisible {
+		border: 1px solid #E0E2DB;
+		border-radius: 10px;
+		padding: 2rem;
+		& button{
+			background-image: linear-gradient(to right, #eb3941, #f15e64, #e14e53, #e2373f);  
+			color: #fff;
+			cursor: pointer;
+			height: 40px;
+			text-align:center;
 			border: none;
-			background-color: #ffb1b1;
-			color: #3f3d56;
-				&:hover, &:focus {
-					color: white;
-					cursor: pointer;
-				}
+			align-self: center;
+			background-size: 300% 100%;
+			margin-top: 6rem;
+			border-radius: 5%;
+			padding: 0 1rem;
+			moz-transition: all .4s ease-in-out;
+			-o-transition: all .4s ease-in-out;
+			-webkit-transition: all .4s ease-in-out;
+			transition: all .4s ease-in-out;
+			&:hover{
+				background-position: 100% 0;
+				moz-transition: all .4s ease-in-out;
+				-o-transition: all .4s ease-in-out;
+				-webkit-transition: all .4s ease-in-out;
+				transition: all .4s ease-in-out;
+			}
+			&:focus{
+				outline: none; 
 			}
 		}
-		&__info {
+		&__avatar{
 			display: flex;
-			flex-direction: column;
+			flex-direction: row;
+			justify-content: flex-start;
+			& img{
+				margin-right: 2rem;
+				width: 15rem;
+				height: 15rem;
+			}
+			
+		}
+		&__infos{
 			text-align: left;
-			margin: 1rem;
-			&__title {
-			font-weight: bold;
-			margin: 1rem 0 0.4rem 0;
+			margin-top: 20px;
+			& h2{
+				font-size: 15px;
 			}
-			&__text {
-			background: white;
-			border-radius: 10px;
-			padding: 0.5rem;
-			width: 15rem;
+			& p{
+				font-size: 20px;
+				padding-bottom: 20px;
 			}
 		}
-		&__smallButton {
-			border: 2px solid #3f3d56;
-			border-radius: 25px;
-			color: #3f3d56;
-			font-size: 15px;
-			font-weight: bold;
-			padding: 0.4rem;
-			margin: 1rem;
-			outline-style: none;
-			background: white;
-			&:hover, &:focus {
-			color: #ff6363;
-			cursor: pointer;
-			}
+		&__save{
+			width: 20%;
 		}
-		&__bigButton {
-			border: 3px solid #3f3d56;
-			border-radius: 25px;
-			color: #3f3d56;
-			font-size: 15px;
-			font-weight: bold;
-			padding: 0.9rem;
-			margin: 1rem;
-			outline-style: none;
-			&:hover, &:focus {
-			border: 3px solid #ff6363;
-			color: #ff6363;
-			cursor: pointer;
-			}
+		&__delete{
+			width: 20%;
 		}
 	}
 </style>
