@@ -142,7 +142,7 @@
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
     .like {
         &__button:hover {
             color: #ff6363;
