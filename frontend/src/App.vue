@@ -14,6 +14,9 @@
   p{
     margin: 0;
   }
+  body{
+    background-color: #EFEFEF;
+  }
 
   #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
