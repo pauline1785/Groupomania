@@ -34,5 +34,5 @@ Création d'un réseau social d'entreprise
    ## Frontend :
     1. Tapez la commande cd frontend, puis npm install, puis npm run serve
     
-    2.  Le frontend de l'application doit fonctionner sur localhost avec le port par défaut 8080
+    2. Le frontend de l'application doit fonctionner sur localhost avec le port par défaut 8080
 
