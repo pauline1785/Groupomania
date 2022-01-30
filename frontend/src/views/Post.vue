@@ -2,7 +2,7 @@
     <Navbar/>
     <!-- CREATION D'UN POST -->
     <section class="NewPost">
-        <ProfileImage v-if="imageProfile == 'null'" :src="'../assets/avatar_null.png'" class="NewPost__avatar"/>
+        <ProfileImage v-if="imageProfile == 'null'" :src="'user-solid.svg'" class="NewPost__avatar"/>
         <ProfileImage v-else :src="imageProfile" class="NewPost__avatar"/>
 
         <form @submit.prevent="createPost" aria-label="Nouveau message" class="NewPost__content">
@@ -89,9 +89,7 @@
                     <form @submit.prevent="createComment(post.id)" class="NewComment__form">
                         <textarea v-model="contentComment" class="NewComment__text" name="comment" id="comment" placeholder="Ecrivez votre commentaire ..." aria-label="Rédiger un nouveau commentaire"/>              
                         
-                        <div>
-                            <button class="NewComment__publish" aria-label="Publier le commentaire">Commenter</button>
-                        </div>
+                        <button class="NewComment__publish" aria-label="Publier le commentaire">Commenter</button>
                     </form>
                 </div>
             </div>
@@ -373,6 +371,7 @@
 
 
 <style lang="scss" scoped>
+//new post
     .NewPost{
         padding: 1rem;
         width: 40%;
@@ -380,8 +379,7 @@
         background-color: #FFF;
         margin: 2rem auto;
         display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
+        flex-flow: row wrap;
         justify-content: space-between;
         border-radius: 10px;
         border: 1px solid #E0E2DB;
@@ -419,7 +417,7 @@
             border: none;
             align-self: center;
             background-size: 300% 100%;
-            border-radius: 5%;
+            border-radius: 5px;
             moz-transition: all .4s ease-in-out;
             -o-transition: all .4s ease-in-out;
             -webkit-transition: all .4s ease-in-out;
@@ -445,7 +443,7 @@
         }
     }
 
-
+// feed
     .Feed{
        margin: 2rem auto;
     }
@@ -566,7 +564,7 @@
         }
         &__publish{
             background-image: linear-gradient(to right, #eb3941, #f15e64, #e14e53, #e2373f);  
-            width: 15%;
+            width: 40%;
             color: #fff;
             cursor: pointer;
             height: 40px;
@@ -574,7 +572,7 @@
             border: none;
             align-self: center;
             background-size: 300% 100%;
-            border-radius: 5%;
+            border-radius: 5px;
             moz-transition: all .4s ease-in-out;
             -o-transition: all .4s ease-in-out;
             -webkit-transition: all .4s ease-in-out;
@@ -592,5 +590,66 @@
         } 
     }
 
+// RESPONSIVE
+    @media screen and (max-width: 1400px){
+        .NewPost{
+            width: 60%;
+        }
+
+        .Post{
+            width: 60%;
+        }
+    }
+
+    @media screen and (max-width: 1200px){
+        .NewPost{
+            width: 80%;
+        }
+
+        .Post{
+            width: 80%;
+        }
+    }
+
+    @media screen and (max-width: 768px){
+        .NewPost{
+            width: 90%;
+            padding: 0.5rem;
+            &__avatar{
+                width: 3rem;
+                height: 3rem;
+            }
+            &__content__text{
+                width: 90%;
+                min-height: 70px;
+            }
+            &__publish{
+                order: 4;
+                width: 80%;
+                margin: 0 auto;
+            }
+            &__upload{
+                order: 3;
+            }
+        }
+
+        .Post{
+            width: 90%;
+            padding: 0.5rem;
+            &__user__avatar{
+                width: 3rem;
+                height: 3rem;
+            }
+            &__user__infos{
+                left: 4rem;
+            }
+        }
+
+        .NewComment{
+            &__publish{
+                width: 100%;
+            }
+        }
+    }
 
 </style>

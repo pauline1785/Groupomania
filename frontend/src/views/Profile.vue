@@ -131,6 +131,7 @@
 		border: 1px solid #E0E2DB;
 		border-radius: 10px;
 		padding: 2rem;
+		background-color: #fff;
 		& button{
 			background-image: linear-gradient(to right, #eb3941, #f15e64, #e14e53, #e2373f);  
 			color: #fff;
@@ -141,7 +142,7 @@
 			align-self: center;
 			background-size: 300% 100%;
 			margin-top: 6rem;
-			border-radius: 5%;
+			border-radius: 5px;
 			padding: 0 1rem;
 			moz-transition: all .4s ease-in-out;
 			-o-transition: all .4s ease-in-out;
@@ -185,6 +186,28 @@
 		}
 		&__delete{
 			width: 20%;
+		}
+	}
+
+// RESPONSIVE
+	@media screen and (max-width: 992px){
+		.Profile{
+			width: 80%;
+			&__avatar{
+				flex-direction: column;
+				& img{
+					margin: 0 auto;
+				}
+			}
+			& button{
+				margin-top: 1rem;
+			}
+			&__save{
+				width: 80%;
+			}
+			&__delete{
+				width: 80%;
+			}
 		}
 	}
 </style>
