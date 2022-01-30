@@ -89,8 +89,8 @@
     }
 
     .login{
-        position: absolute;
-        margin: 150px;
+        position: relative;
+        margin: 100px;
         display: flex;
         flex-direction: column;
         width: 40%;
@@ -151,6 +151,18 @@
             &:focus{
                outline: none; 
             }
+        }
+    }
+// RESPONSIVE
+    @media screen and (max-width: 992px){
+        .home{
+            &__photo{
+                display: none;
+            }
+        }
+        .login{
+            width: 80%;
+            margin: 5rem auto;
         }
     }
 
