@@ -1,5 +1,5 @@
 <template>
-		<img src="../assets/avatar_null.png" class="photo" alt="Photo de profil"/>
+		<img :src=" src || 'user-solid.svg'" class="photo" alt="Photo de profil"/>
 </template>
 
 
