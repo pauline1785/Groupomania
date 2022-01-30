@@ -63,6 +63,8 @@
             background: #f1f1f1;
             color: #3f3d56;
             padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #E0E2DB;
             &__title {
                 display: flex;
                 flex-direction: column;
@@ -94,7 +96,7 @@
                 border: none;
                 align-self: center;
                 background-size: 300% 100%;
-                border-radius: 5%;
+                border-radius: 5px;
                 moz-transition: all .4s ease-in-out;
                 -o-transition: all .4s ease-in-out;
                 -webkit-transition: all .4s ease-in-out;

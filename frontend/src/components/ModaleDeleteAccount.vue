@@ -4,14 +4,14 @@
         
         <div class="modaleBloc__card">
             <div class="modaleBloc__card__title">
-                <h2>Etes-vous sûr de vouloir supprimer votre compte ?</h2>
+                <p>Etes-vous sûr de vouloir supprimer votre compte ?</p>
                 <p>(Cette action est irréversible)</p>
                 <div class="modaleBloc__card__title__close">
                     <i @click="displayModale" class="far fa-times-circle fa-2x modaleBloc__card__title__close"></i>
                 </div>
             </div>
 
-            <button @click="deleteAccount" class="modaleBloc__card__button">Oui, je supprime mon compte</button>
+            <button @click="deleteAccount" class="modaleBloc__card__button">Oui, supprimer mon compte</button>
         </div>
     </div>
 </template>
@@ -84,6 +84,9 @@
             position: fixed;
             background: #f1f1f1;
             color: #3f3d56;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #E0E2DB;
             &__title {
                 display: flex;
                 flex-direction: column;
@@ -106,17 +109,29 @@
                 }
             }
             &__button {
-                border: 3px solid #3f3d56;
-                border-radius: 25px;
-                color: #3f3d56;
-                font-size: 15px;
-                font-weight: bold;
-                padding: 0.9rem;
-                margin: 1rem 0 2rem 0;
-                outline-style: none;
-                &:hover, &:focus {
-                    border: 3px solid #ff6363;
-                    color: #ff6363;
+               background-image: linear-gradient(to right, #eb3941, #f15e64, #e14e53, #e2373f);  
+                width: 40%;
+                color: #fff;
+                cursor: pointer;
+                height: 40px;
+                text-align:center;
+                border: none;
+                align-self: center;
+                background-size: 300% 100%;
+                border-radius: 5px;
+                moz-transition: all .4s ease-in-out;
+                -o-transition: all .4s ease-in-out;
+                -webkit-transition: all .4s ease-in-out;
+                transition: all .4s ease-in-out;
+                &:hover{
+                    background-position: 100% 0;
+                    moz-transition: all .4s ease-in-out;
+                    -o-transition: all .4s ease-in-out;
+                    -webkit-transition: all .4s ease-in-out;
+                    transition: all .4s ease-in-out;
+                }
+                &:focus{
+                outline: none; 
                 }
             }
         }       
