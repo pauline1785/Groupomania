@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const db = require('../models/index');
 const fs = require('fs');
 
-// Permet de créer un nouveau message
+// Permet de créer un nouveau post
 exports.createPost = (req, res, next) => {   
     const content = req.body.content;
 
@@ -16,9 +16,9 @@ exports.createPost = (req, res, next) => {
         return res.status(400).json({ error: 'Tous les champs doivent être renseignés' });
     } 
 
-    // Permet de contrôler la longueur du titre et du contenu du message
+    // Permet de contrôler la longueur du titre et du contenu du posy
     if (content.length <= 4) {
-        return res.status(400).json({ error: 'Le contenu du message doit contenir au moins 4 caractères' });
+        return res.status(400).json({ error: 'Le contenu du post doit contenir au moins 4 caractères' });
     }
     
     db.User.findOne({
@@ -33,7 +33,7 @@ exports.createPost = (req, res, next) => {
                 UserId: userFound.id
             })
             post.save()
-            .then(() => res.status(201).json({ message: 'Votre message a bien été créé !' }))
+            .then(() => res.status(201).json({ message: 'Votre post a bien été créé !' }))
             .catch(error => res.status(400).json({ error: 'Error : code 400' }));
         } else {
             return res.status(404).json({ error: 'Utilisateur non trouvé' })
@@ -43,8 +43,10 @@ exports.createPost = (req, res, next) => {
 };
 
 
-// Permet d'afficher tous les messages
+// Permet d'afficher tous les post
 exports.getAllPosts = (req, res, next) => {
+
+
     db.Post.findAll({
         order: [['createdAt', "DESC"]] ,
         include: [{
@@ -58,7 +60,7 @@ exports.getAllPosts = (req, res, next) => {
         if(postFound) {
             res.status(200).json(postFound);
         } else {
-            res.status(404).json({ error: 'Aucun message trouvé' });
+            res.status(404).json({ error: 'Aucun post trouvé' });
         }
     })
     .catch(error => {
@@ -67,69 +69,80 @@ exports.getAllPosts = (req, res, next) => {
 }
 
 
-// Permet de modifier un message
+// Permet de modifier un post
 exports.modifyPost = (req, res, next) => {
-    console.log('file', req.file);
-    console.log('content', req.body.content);
-    console.log('bodypost', req.body.post);
     const postObject = req.file ?
     {
     content: req.body.content,
     imagePost: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
 
-    console.log('body', req.body);
-    console.log(req.params.postId);
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, 'RANDOM_SECRET_TOKEN');
+    const userId = decodedToken.userId;
 
     db.Post.findOne({
-        where: {  id: req.params.postId },
+        attributes: ['userId'],
+        where: { id: req.params.postId }
     })
-    .then(postFound => {
-        if(postFound) {
-            db.Post.update(postObject, {
-                where: { id: req.params.postId}
-            })
-            .then(post => res.status(200).json({ message: 'Votre message a bien été modifié !' }))
-            .catch(error => res.status(400).json({ error: 'Error : code 400' }))
-        }
-        else {
-            res.status(404).json({ error: 'Message non trouvé' });
+    .then(post => {
+        if(userId === post.userId) {
+            if(post) {
+                db.Post.update(postObject, {
+                    where: { id: req.params.postId}
+                })
+                .then(post => res.status(200).json({ message: 'Votre post a bien été modifié !' }))
+                .catch(error => res.status(400).json({ error: 'Error : code 400' }))
+            }
+            else {
+                res.status(404).json({ error: 'Post non trouvé' });
+            }
+        } else {
+            return res.status(401).json({ error: 'Utilisateur non authorisé' })
         }
     })
     .catch(error => res.status(500).json({ error: 'Error : code 500' }));
 }
 
 
-// Permet de supprimer un message
+// Permet de supprimer un post
 exports.deletePost = (req, res, next) => {
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, 'RANDOM_SECRET_TOKEN');
+    const userId = decodedToken.userId;
+
     db.Post.findOne({
-        attributes: ['id'],
+        attributes: ['userId'],
         where: { id: req.params.postId }
     })
     .then(post => {
-        if(post) {
-            if(post.imagePost != null) {
-                const filename = post.imagePost.split('/images/')[1];
-            
-                fs.unlink(`images/${filename}`, () => {
+        if(userId === post.userId) {
+            if(post) {
+                if(post.imagePost != null) {
+                    const filename = post.imagePost.split('/images/')[1];
+                
+                    fs.unlink(`images/${filename}`, () => {
+                        db.Post.destroy({ 
+                            where: { id: req.params.postId } 
+                        })
+                        .then(() => res.status(200).json({ message: 'Votre post a été supprimé' }))
+                        .catch(() => res.status(500).json({ error: 'Error : code 500' }));
+                    })
+                } else {
                     db.Post.destroy({ 
                         where: { id: req.params.postId } 
                     })
-                    .then(() => res.status(200).json({ message: 'Votre message a été supprimé' }))
+                    .then(() => res.status(200).json({ message: 'Votre post a été supprimé' }))
                     .catch(() => res.status(500).json({ error: 'Error : code 500' }));
-                })
+                }
             } else {
-                db.Post.destroy({ 
-                    where: { id: req.params.postId } 
-                })
-                .then(() => res.status(200).json({ message: 'Votre message a été supprimé' }))
-                .catch(() => res.status(500).json({ error: 'Error : code 500' }));
+                return res.status(404).json({ error: 'Post non trouvé'})
             }
         } else {
-            return res.status(404).json({ error: 'Message non trouvé'})
+            return res.status(401).json({ error: 'Utilisateur non authorisé' })
         }
     })
-    .catch(error => res.status(500).json({ error: 'Error : code 500!' }));
+    .catch(error => res.status(500).json({ error: 'Error : code 500' }));
 }
 
 
